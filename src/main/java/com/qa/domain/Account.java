@@ -1,9 +1,16 @@
 package com.qa.domain;
 
+import javax.persistence.*;
+@Table(name = "Accounts")
+@Entity()
 public class Account {
 
+	@Column(length = 50)
 	private String firstName;
+	@Column(length = 50)
 	private String secondName;
+	@Column(length = 8)
+	@Id
 	private String accountNumber;
 
 	public Account(String firstName, String secondName, String accountNumber) {
