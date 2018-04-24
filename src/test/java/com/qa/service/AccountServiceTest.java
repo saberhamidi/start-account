@@ -1,5 +1,6 @@
 package com.qa.service;
 
+import com.qa.repository.AccountMapRepository;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -9,14 +10,14 @@ import com.qa.util.JSONUtil;
 
 public class AccountServiceTest {
 
-	private AccountService service;
+	private AccountMapRepository service;
 	private Account joeBloggs;
 	private Account janeBloggs;
 	private JSONUtil util;
 
 	@Before
 	public void init() {
-		service = new AccountService();
+		service = new AccountMapRepository();
 		joeBloggs = new Account("Joe", "Bloggs", "1234");
 		janeBloggs = new Account("Jane", "Bloggs", "1234");
 		util = new JSONUtil();
@@ -24,16 +25,10 @@ public class AccountServiceTest {
 
 	@Test
 	public void addAndRemoveAccountTest() {
-		service.addAccountFromMap(joeBloggs);
+		service.create(joeBloggs);
 		Assert.assertEquals(service.getAccountMap().size(), 1);
-		service.addAccountFromMap(janeBloggs);
+		service.create(janeBloggs);
 		Assert.assertEquals(service.getAccountMap().size(), 2);
-		service.removeAccountFromMap(0);
-		Assert.assertEquals(service.getAccountMap().size(), 1);
-		service.removeAccountFromMap(1);
-		Assert.assertEquals(service.getAccountMap().size(), 0);
-		service.removeAccountFromMap(5);
-		Assert.assertEquals(service.getAccountMap().size(), 0);
 	}
 
 	@Test
@@ -42,8 +37,8 @@ public class AccountServiceTest {
 		Assert.assertEquals("{}", emptyMap);
 		String accountAsJSON = "{\"0\":{\"firstName\":\"Joe\",\"secondName\":\"Bloggs\",\"accountNumber\":\"1234\"},\"1\":{\"firstName\":\"Jane\",\"secondName\":\"Bloggs\",\"accountNumber\":\"1234\"}}";
 		Assert.assertEquals("{}", emptyMap);
-		service.addAccountFromMap(joeBloggs);
-		service.addAccountFromMap(janeBloggs);
+		service.create(joeBloggs);
+		service.create(janeBloggs);
 		String populatedAccountMap = util.getJSONForObject(service.getAccountMap());
 		Assert.assertEquals(accountAsJSON, populatedAccountMap);
 	}
@@ -51,10 +46,10 @@ public class AccountServiceTest {
 	@Test
 	public void getCountForFirstNamesInAccount() {
 		Assert.assertEquals(service.getNumberOfAccountWithFirstName("Joe"), 0);
-		service.addAccountFromMap(joeBloggs);
+		service.create(joeBloggs);
 		Assert.assertEquals(service.getNumberOfAccountWithFirstName("Joe"), 1);
 		Account joeGordon = new Account("Joe", "Gordon", "1234");
-		service.addAccountFromMap(joeGordon);
+		service.create(joeGordon);
 		Assert.assertEquals(service.getNumberOfAccountWithFirstName("Joe"), 2);
 	}
 

@@ -2,6 +2,7 @@ package com.qa.repository;
 
 import com.qa.domain.Account;
 
+import javax.enterprise.inject.Default;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -9,7 +10,8 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Transactional(Transactional.TxType.SUPPORTS)
-public class AccountRepository {
+@Default
+public class AccountDBRepository implements Repository{
 
     @PersistenceContext(name="primary")
     private EntityManager em;
