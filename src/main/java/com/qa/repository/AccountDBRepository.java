@@ -1,8 +1,10 @@
 package com.qa.repository;
 
+import com.qa.business.AccountService;
 import com.qa.domain.Account;
 
 import javax.enterprise.inject.Default;
+import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
@@ -16,13 +18,19 @@ public class AccountDBRepository implements Repository{
     @PersistenceContext(name="primary")
     private EntityManager em;
 
+    @Inject
+    private AccountService accountService;
+
     public Account find(Long id){
         return em.find(Account.class, id);
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
     public Account create(Account account){
-        em.persist(account);
+        if (accountService.create(account) == "ok"){
+            em.persist(account);
+            return account;
+        }
         return account;
     }
 
