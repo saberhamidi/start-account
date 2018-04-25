@@ -5,18 +5,28 @@ import javax.persistence.*;
 @Entity()
 public class Account {
 
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Long id;
 	@Column(length = 50)
 	private String firstName;
 	@Column(length = 50)
 	private String secondName;
 	@Column(length = 8)
-	@Id
 	private String accountNumber;
 
 	public Account(String firstName, String secondName, String accountNumber) {
 		this.firstName = firstName;
 		this.secondName = secondName;
 		this.accountNumber = accountNumber;
+	}
+
+	public Account(){
+
+	}
+
+	public Long getId() {
+		return id;
 	}
 
 	public String getFirstName() {

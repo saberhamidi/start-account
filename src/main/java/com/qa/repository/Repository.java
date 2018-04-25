@@ -7,7 +7,8 @@ import java.util.List;
 public interface Repository {
 
     Account find(Long id);
-    Account create(Account ac);
+    String create(Account ac);
     String delete(Long id);
+    Account update(Account ac);
     List<Account> findAll();
 }
