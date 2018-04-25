@@ -48,6 +48,7 @@ public class AccountDBRepository implements Repository{
     public List<Account> findAll(){
 
         TypedQuery<Account> query = em.createQuery("select ac from Account ac order by ac.firstName", Account.class);
+        System.out.println("repo method called");
         return query.getResultList();
     }
 }
