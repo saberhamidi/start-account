@@ -23,10 +23,10 @@ public class AccountMapRepository implements Repository{
 		return (Account) accountMap.values().stream()
 				.filter(eachAccount -> eachAccount.getAccountNumber().equals(id));
 	}
-	public Account create(Account userAccount) {
+	public String create(Account userAccount) {
 		accountMap.put(count, userAccount);
 		count++;
-		return userAccount;
+		return "Account successfully created!";
 	}
 
 	public String delete(Long accountToRemove) {
@@ -36,6 +36,11 @@ public class AccountMapRepository implements Repository{
 		}
 
 		return "Account successfully removed!";
+	}
+
+	@Override
+	public Account update(Account ac) {
+		return ac;
 	}
 
 	public Map<Integer, Account> getAccountMap() {

@@ -4,6 +4,7 @@ import com.qa.domain.Account;
 import com.qa.repository.Repository;
 
 import javax.inject.Inject;
+import javax.validation.constraints.Min;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
@@ -22,9 +23,8 @@ public class AccountEndPoint {
     @GET
     @Path("/{id : \\d+}")
     @Produces(MediaType.APPLICATION_JSON)
-    public Response getAccount(Long id){
+    public Response getAccount(@PathParam("id") @Min(1) Long id){
         Account account = repository.find(id);
-
         if (account == null)
             return Response.status(Response.Status.NOT_FOUND).build();
 
@@ -33,31 +33,38 @@ public class AccountEndPoint {
 
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
+    @Produces(MediaType.APPLICATION_JSON)
     public Response createAccount(Account account, @Context UriInfo uriInfo){
-        account = repository.create(account);
-        URI createdURI = uriInfo.getBaseUriBuilder().path(account.getAccountNumber().toString()).build();
-        return Response.created(createdURI).build();
+       String result =  repository.create(account);
+        return Response.ok(result).build();
     }
 
-//    public Response deleteAccount(Long id){
-//
-//    }
-//
-//    public Response updateAccount(Account account){
-//
-//    }
+    @DELETE
+    @Path("/{id : \\d+}")
+    public Response deleteAccount(@PathParam("id") @Min(1) Long id){
+        String responce = repository.delete(id);
+        return Response.ok(responce).build();
+
+    }
+
+    @PUT
+    @Produces(MediaType.APPLICATION_JSON)
+    @Consumes(MediaType.APPLICATION_JSON)
+    public Response updateAccount(Account account){
+        account = repository.update(account);
+        return Response.ok(account).build();
+    }
 
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAccounts(){
         List<Account> accounts = repository.findAll();
         if (accounts.size() == 0) {
-            System.out.println("api method call");
+            System.out.println("Method called");
             return Response.status(Response.Status.NO_CONTENT).build();
         }
         else {
             return Response.ok(accounts).build();
         }
     }
-
 }
